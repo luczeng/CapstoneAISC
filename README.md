@@ -1,1 +1,1 @@
-# CaptoneAISC
+# CapstoneAISC
