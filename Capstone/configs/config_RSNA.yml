@@ -1,0 +1,20 @@
+NET:
+    NET_TYPE: "resnet"
+TRAIN:
+    TRAIN_DATASET_PATH: 'dataset/rsna-pneumonia-detection-challenge/stage_2_train_images'
+    TRAIN_LABEL_PATH: 'dataset/rsna-pneumonia-detection-challenge/cleaned_train_labels.csv'
+    SAVE_PATH: 'training_results/test_run'
+    N_EPOCH: 1000
+    LR: 0.0001
+    LOSS_PERIOD: 10
+    MINI_BATCH_SIZE: 4
+    SAVING_EPOCH: 1000
+    LOAD_CHECKPOINT: 1
+VALIDATION:
+    USE_VALIDATION: 1
+    VALIDATION_PERIOD: 10
+TEST:
+    TEST_DATASET_PATH: 'dataset/rsna-pneumonia_detection-challenge/test_images'
+    WEIGHT_PATH: 'models'
+MLFLOW:
+    LOG_WEIGHTS: 0
