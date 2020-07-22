@@ -63,3 +63,5 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
                 # Checkpoint, save checkpoint to disck
                 ckp = define_checkpoint(net, optimizer, epoch)
                 save_checkpoint(ckp, ckp_path)
+
+    # Run evaluation on test set
