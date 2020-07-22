@@ -41,6 +41,7 @@ def run_train(args):
         net_type = torch.cuda.FloatTensor
     else:
         net_type = torch.FloatTensor
+    net = net.type(net_type) #todo: find another way
 
     # Initlialization
     optimizer = optim.Adam(net.parameters(), lr=cfg.lr)

@@ -6,15 +6,16 @@ TRAIN:
     SAVE_PATH: 'training_results/test_run'
     N_EPOCH: 1000
     LR: 0.0001
-    LOSS_PERIOD: 10
+    LOSS_PERIOD: 5
     MINI_BATCH_SIZE: 4
-    SAVING_EPOCH: 1000
+    SAVING_EPOCH: 1500
     LOAD_CHECKPOINT: 1
 VALIDATION:
     USE_VALIDATION: 1
-    VALIDATION_PERIOD: 10
+    VALIDATION_PERIOD: 5
 TEST:
     TEST_DATASET_PATH: 'dataset/rsna-pneumonia_detection-challenge/test_images'
+    TEST_LABEL_PATH: 'dataset/rsna-pneumonia-detection-challenge/test_labels.csv'
     WEIGHT_PATH: 'models'
 MLFLOW:
     LOG_WEIGHTS: 0

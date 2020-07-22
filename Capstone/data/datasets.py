@@ -5,15 +5,17 @@ import torch
 
 
 class DatasetRSNA(Dataset):
-    def __init__(self, cfg):
+    def __init__(self, net_type, image_folder_path, label_file_path):
         """
-            :param cfg parsed config
         """
 
-        self.cfg = cfg
-        with open(cfg.train_label_path, newline="") as f:
+        with open(label_file_path, newline="") as f:
             reader = csv.reader(f)
             self.data = list(reader)
+
+        self.net_type = net_type
+        self.image_folder_path = image_folder_path
+        self.label_file_path = label_file_path
 
     def __getitem__(self, idx):
         """
@@ -24,12 +26,12 @@ class DatasetRSNA(Dataset):
 
         img_info = self.data[idx]
 
-        img_path = self.cfg.train_dataset_path + "/" + img_info[0] + ".dcm"
+        img_path = self.image_folder_path + "/" + img_info[0] + ".dcm"
         dataset = pydicom.dcmread(img_path)
         image = dataset.pixel_array
-        image = torch.tensor(image[None, :, :]).type(torch.float)
+        image = torch.tensor(image[None, :, :]).type(self.net_type)
 
-        label = int(img_info[5])
+        label = torch.tensor(int(img_info[5])).type(torch.cuda.LongTensor)
 
         sample = {"image": image, "label": label}
 

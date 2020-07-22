@@ -1,6 +1,9 @@
-from torch.utils.data import DataLoader
 from Capstone.utils.nn_utils import load_checkpoint, save_checkpoint, define_checkpoint
 from Capstone.data.datasets import DatasetRSNA
+from Capstone.utils.nn_utils import print_info
+from Capstone.utils.evaluation_utils import evaluate_model
+from torch.utils.data import DataLoader
+import torch
 import mlflow
 import mlflow.pytorch
 
@@ -20,14 +23,16 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
         start = load_checkpoint(ckp_path, net, optimizer)
 
     # Data
-    dataset = DatasetRSNA(cfg)
+    dataset = DatasetRSNA(net_type, cfg.train_dataset_path, cfg.train_label_path)
     dataloader = DataLoader(dataset, batch_size=cfg.mini_batch_size, shuffle=True)
 
     # Training loop
     iterations = 0
     running_loss = 0.0
+    epoch = 0
     for epoch in range(start, cfg.n_epoch):
-        for idx, batch in enumerate(dataloader):
+        idx = 0
+        for batch in dataloader:
 
             # GPU
             net.zero_grad()
@@ -45,23 +50,21 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
             iterations += 1
 
             # Print info, logging
-            if (epoch % cfg.loss_period == (cfg.loss_period - 1)) & (epoch != 0):
-
-                # Mlflow loggin
-                mlflow.log_metric("train_loss", running_loss / iterations, step=epoch + idx)
-
+            idx += 1
+            if (idx % cfg.loss_period == (cfg.loss_period - 1)) & (idx != 0):
                 # Print training info
-                running_loss, iterations = print_info_small_dataset(
-                    running_loss, iterations, epoch, idx, len(dataset), cfg
-                )
+                running_loss = print_info( running_loss, iterations, epoch, idx, len(dataset), cfg)
+                print(torch.argmax(x, axis =1),'/n',batch['label'])
 
             # Run evaluation
-            if (epoch % cfg.validation_period == cfg.validation_period - 1) & epoch != 0:
-                pass
+            if (idx % cfg.validation_period == cfg.validation_period - 1) & idx!= 0:
+                evaluate_model(net, cfg.test_dataset_path, cfg.test_label_path, cfg, net_type)
 
-            if epoch % cfg.saving_epoch == cfg.saving_epoch - 1:
+            if idx % cfg.saving_epoch == cfg.saving_epoch - 1:
                 # Checkpoint, save checkpoint to disck
                 ckp = define_checkpoint(net, optimizer, epoch)
                 save_checkpoint(ckp, ckp_path)
+
+        epoch += 1
 
     # Run evaluation on test set
