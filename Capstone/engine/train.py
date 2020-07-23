@@ -54,13 +54,19 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
             if (idx % cfg.loss_period == (cfg.loss_period - 1)) & (idx != 0):
                 # Print training info
                 running_loss = print_info( running_loss, iterations, epoch, idx, len(dataset), cfg)
-                print(torch.argmax(x, axis =1),'/n',batch['label'])
+                mlflow.log_metric("train_loss", running_loss / (cfg.loss_period*cfg.mini_batch_size), step=epoch + idx)
+                print('\t', torch.argmax(x, axis =1),'\t',batch['label'])
 
             # Run evaluation
-            if (idx % cfg.validation_period == cfg.validation_period - 1) & idx!= 0:
-                evaluate_model(net, cfg.test_dataset_path, cfg.test_label_path, cfg, net_type)
+            if (idx % cfg.validation_period == (cfg.validation_period - 1)) & idx!= 0:
+                accuracy = evaluate_model(net, cfg.test_dataset_path, cfg.test_label_path, cfg, net_type)
+                mlflow.log_metric("accuracy", accuracy.item(), step=epoch + idx)
+                print(
+                    "Epoch : %d/%d, iteration: %d/%5d || Accuracy: %.3f"
+                    % (epoch, cfg.n_epoch, idx + 1, len(dataset) / cfg.mini_batch_size, accuracy)
+                )
 
-            if idx % cfg.saving_epoch == cfg.saving_epoch - 1:
+            if epoch % cfg.saving_epoch == cfg.saving_epoch - 1:
                 # Checkpoint, save checkpoint to disck
                 ckp = define_checkpoint(net, optimizer, epoch)
                 save_checkpoint(ckp, ckp_path)

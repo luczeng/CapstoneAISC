@@ -26,6 +26,4 @@ def evaluate_model(model, image_folder_path, label_file_path, cfg, net_type):
         inferences =torch.argmax( model(batch["image"]), axis = 1)
         accuracy += torch.sum(batch['label'] - inferences)
 
-        print(accuracy)
-
     return accuracy

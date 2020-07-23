@@ -58,11 +58,15 @@ def split_test_train(train_folder_path, train_labels, test_folder, n_test_images
             shutil.move(img_path, new_img_path)
             labels.append(img)
 
-    # Prepare train labels
+    # Prepare train labels. Removes duplicate as we dont need them.
     train_labels = []
-    for img in data[n_test_images + 1 :]:
-        train_labels.append(img)
+    img_list_names = []
+    for idx, label in enumerate(data[n_test_images + 1 :]):
+        if (label[0] in img_list_names) and (idx != 0):
+            continue
+        img_list_names.append(label[0])
+        train_labels.append(label)
 
-    labels.insert(0, data[0])
-    train_labels.insert(0, data[0])
+    # labels.insert(0, data[0])
+    # train_labels.insert(0, data[0])
     return train_labels, labels

@@ -29,7 +29,7 @@ class parse_config:
 
         # Validation parameters
         self.use_validation = bool(config_dict["VALIDATION"]["USE_VALIDATION"])
-        self.validation_period = bool(config_dict["VALIDATION"]["VALIDATION_PERIOD"])
+        self.validation_period = config_dict["VALIDATION"]["VALIDATION_PERIOD"]
 
         # Test parameters
         self.test_dataset_path = config_dict["TEST"]["TEST_DATASET_PATH"]
