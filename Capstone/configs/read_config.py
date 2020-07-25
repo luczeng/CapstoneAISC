@@ -38,3 +38,6 @@ class parse_config:
 
         # Mlflow
         self.log_weights = bool(config_dict["MLFLOW"]["LOG_WEIGHTS"])
+
+        #Packaging
+        self.mlflow_pyfunc_model_path = config_dict["PACKAGING"]["MLFLOW_PYFUNC_MODEL_PATH"]

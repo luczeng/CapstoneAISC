@@ -33,6 +33,7 @@ def print_info(running_loss, iterations, epoch, idx, dataset_len, config):
 
     return 0.0
 
+
 def log_mlflow_param(config):
     """
         Log mlflow metrics.

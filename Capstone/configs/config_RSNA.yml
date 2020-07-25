@@ -19,3 +19,5 @@ TEST:
     WEIGHT_PATH: 'models'
 MLFLOW:
     LOG_WEIGHTS: 0
+PACKAGING:
+    MLFLOW_PYFUNC_MODEL_PATH: 'training_results/test_run2/pneumonia_pyfunc'
