@@ -1,4 +1,4 @@
-from Capstone.packaging.app import package_model
+from Capstone.packaging.mlflow_packaging import package_model
 from Capstone.configs.read_config import parse_config
 import argparse
 from pathlib import Path
