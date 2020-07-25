@@ -52,13 +52,15 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
             # Print info, logging
             idx += 1
             if (idx % cfg.loss_period == (cfg.loss_period - 1)) & (idx != 0):
-                mlflow.log_metric("train_loss", running_loss / (cfg.loss_period*cfg.mini_batch_size), step=epoch + idx)
+                mlflow.log_metric(
+                    "train_loss", running_loss / (cfg.loss_period * cfg.mini_batch_size), step=epoch + idx
+                )
                 # Print training info
-                running_loss = print_info( running_loss, iterations, epoch, idx, len(dataset), cfg)
-                print('\t', torch.argmax(x, axis =1),'\t',batch['label'])
+                running_loss = print_info(running_loss, iterations, epoch, idx, len(dataset), cfg)
+                print("\t", torch.argmax(x, axis=1), "\t", batch["label"])
 
             # Run evaluation
-            if (idx % cfg.validation_period == (cfg.validation_period - 1)) & idx!= 0:
+            if (idx % cfg.validation_period == (cfg.validation_period - 1)) & idx != 0:
                 accuracy = evaluate_model(net, cfg.test_dataset_path, cfg.test_label_path, cfg, net_type)
                 mlflow.log_metric("accuracy", accuracy.item(), step=epoch + idx)
                 print(
