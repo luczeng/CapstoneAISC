@@ -3,9 +3,9 @@ NET:
 TRAIN:
     TRAIN_DATASET_PATH: 'dataset/rsna-pneumonia-detection-challenge/stage_2_train_images'
     TRAIN_LABEL_PATH: 'dataset/rsna-pneumonia-detection-challenge/cleaned_train_labels.csv'
-    SAVE_PATH: 'training_results/test_run'
+    SAVE_PATH: 'training_results/test_run2'
     N_EPOCH: 1000
-    LR: 0.0001
+    LR: 0.00001
     LOSS_PERIOD: 100
     MINI_BATCH_SIZE: 8
     SAVING_EPOCH: 1

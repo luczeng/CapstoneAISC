@@ -52,9 +52,9 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
             # Print info, logging
             idx += 1
             if (idx % cfg.loss_period == (cfg.loss_period - 1)) & (idx != 0):
+                mlflow.log_metric("train_loss", running_loss / (cfg.loss_period*cfg.mini_batch_size), step=epoch + idx)
                 # Print training info
                 running_loss = print_info( running_loss, iterations, epoch, idx, len(dataset), cfg)
-                mlflow.log_metric("train_loss", running_loss / (cfg.loss_period*cfg.mini_batch_size), step=epoch + idx)
                 print('\t', torch.argmax(x, axis =1),'\t',batch['label'])
 
             # Run evaluation
