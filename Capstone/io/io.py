@@ -8,6 +8,7 @@ def load_dicom(img_path :str):
         Loads dicom image into numpy array
 
         :param img_path to .dcm iamge
+        :return img: loaded image
     '''
 
     data = dataset = pydicom.dcmread(img_path)
@@ -28,4 +29,4 @@ def load_folder(folder_path :str):
     for i, f in enumerate(Path(fp).iterdir()):
         imgs[i, :, :, :] = load_dicom(str(f))[None, :, :]
 
-
+    return imgs

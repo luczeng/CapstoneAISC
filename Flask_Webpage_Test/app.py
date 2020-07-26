@@ -9,7 +9,8 @@ import pandas as pd
 import mlflow.pyfunc
 import json
 from flask import Flask, render_template, redirect, url_for, request, jsonify
-import pydicom
+from pathlib import Path
+from Capstone.io.io import load_dicom
 
 def parse_args():
 
@@ -72,15 +73,22 @@ def predict():
     member = request.data
     folder_path = member.decode('utf-8')
 
-    # Load image
-    data = dataset = pydicom.dcmread(folder_path)
-    img = pd.DataFrame(data.pixel_array)
+    # Create panda dataframe
+    predictions = []
+    for fp in Path(folder_path).iterdir():
 
-    # Format the request to a dataframe
-    pred = model.predict(img).tolist()
+        # Load image
+        img = load_dicom(fp)
+
+        # Format the request to a dataframe
+        img_pf = pd.DataFrame(img)
+        pred_arr = model.predict(img_pf)
+
+        # Append predictions
+        predictions.append(pred_arr[0].tolist())
 
 	# Return prediction as reponse
-    return jsonify(pred)
+    return jsonify(predictions)
 
 # Run Flask env
 if __name__ == "__main__":

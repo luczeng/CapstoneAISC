@@ -32,6 +32,9 @@ class resnet_wrapper(mlflow.pyfunc.PythonModel):
 
 
 def package_model(mlflow_pyfunc_model_path, state_dict_path: str, env_path: str):
+    '''
+
+    '''
 
     # Artifacts (everything we want to package with the model)
     artifacts = {"state_dict": state_dict_path}
