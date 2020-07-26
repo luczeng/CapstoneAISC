@@ -2,16 +2,31 @@ import mlflow.pyfunc
 from Capstone.modeling.resnet import initalize_resnet
 import yaml
 import torch
+import torch.nn as nn
 
 
 class resnet_wrapper(mlflow.pyfunc.PythonModel):
     def load_context(self, context):
+        '''
+            Load weights
+        '''
         self.net = initalize_resnet(2)
         self.net.type(torch.cuda.FloatTensor)
+        self.softmax = nn.Softmax(dim = 1)
 
     def predict(self, context, model_input):
+        '''
+            Runs inference on input folder and then applies softmax
+        '''
+
+        #P Prepare data in torch format
         example = torch.tensor(model_input.values)[None, None, :, :].type(torch.cuda.FloatTensor)
+
+        # Run inference
         probs = self.net(example)
+
+        # Normalise
+        probs = self.softmax(probs)
 
         return probs.detach().cpu().numpy()
 

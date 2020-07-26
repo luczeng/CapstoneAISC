@@ -64,6 +64,9 @@ def about():
 # Prediction endpoint
 @app.route('/predict', methods=['POST'])
 def predict():
+    '''
+        Loads request from disk and then launch prediction
+    '''
 
     # retrieve request
     member = request.data
@@ -74,9 +77,7 @@ def predict():
     img = pd.DataFrame(data.pixel_array)
 
     # Format the request to a dataframe
-    # inf_df = pd.DataFrame(req['data'])
     pred = model.predict(img).tolist()
-    print(pred)
 
 	# Return prediction as reponse
     return jsonify(pred)
