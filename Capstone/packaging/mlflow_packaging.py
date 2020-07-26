@@ -10,7 +10,7 @@ class resnet_wrapper(mlflow.pyfunc.PythonModel):
         self.net.type(torch.cuda.FloatTensor)
 
     def predict(self, context, model_input):
-        example = torch.tensor(model_input.values)[None, None, :, :].type( torch.cuda.FloatTensor)
+        example = torch.tensor(model_input.values)[None, None, :, :].type(torch.cuda.FloatTensor)
         probs = self.net(example)
 
         return probs.detach().cpu().numpy()
@@ -23,8 +23,12 @@ def package_model(mlflow_pyfunc_model_path, state_dict_path: str, env_path: str)
 
     # Load conda env
     with open(env_path, "r") as f:
-        conda_env = yaml.load(env_path)
+        conda_env = yaml.load(env_path, Loader=yaml.FullLoader)
 
     mlflow.pyfunc.save_model(
-        path=mlflow_pyfunc_model_path, python_model=resnet_wrapper(), artifacts=artifacts, conda_env=conda_env, code_path=["Capstone"]
+        path=mlflow_pyfunc_model_path,
+        python_model=resnet_wrapper(),
+        artifacts=artifacts,
+        conda_env=conda_env,
+        code_path=["Capstone"],
     )

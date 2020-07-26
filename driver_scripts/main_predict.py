@@ -14,7 +14,8 @@ def parse_args():
 
     return args
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     # Configs
     args = parse_args()
