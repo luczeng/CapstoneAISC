@@ -12,14 +12,15 @@ from flask import Flask, render_template, redirect, url_for, request, jsonify
 from pathlib import Path
 from Capstone.io.io import load_dicom
 
+
 def parse_args():
 
     parser = argparse.ArgumentParser(description="")
     parser.add_argument("-c", "--config_path", type=str, required=True)
-    parser.add_argument("-i", "--input_image", type=str, required=True)
     args = parser.parse_args()
 
     return args
+
 
 app = Flask(__name__)
 
@@ -62,16 +63,17 @@ def image():
 def about():
     return render_template("about.html")
 
+
 # Prediction endpoint
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
-    '''
+    """
         Loads request from disk and then launch prediction
-    '''
+    """
 
     # retrieve request
     member = request.data
-    folder_path = member.decode('utf-8')
+    folder_path = member.decode("utf-8")
 
     # Create panda dataframe
     predictions = []
@@ -87,8 +89,9 @@ def predict():
         # Append predictions
         predictions.append(pred_arr[0].tolist())
 
-	# Return prediction as reponse
+    # Return prediction as reponse
     return jsonify(predictions)
+
 
 # Run Flask env
 if __name__ == "__main__":
@@ -99,4 +102,4 @@ if __name__ == "__main__":
     # Load model at app startup
     model = mlflow.pyfunc.load_model(cfg.mlflow_pyfunc_model_path)
 
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
