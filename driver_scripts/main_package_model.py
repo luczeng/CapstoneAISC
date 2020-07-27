@@ -1,4 +1,4 @@
-from Capstone.packaging.app import package_model
+from Capstone.packaging.mlflow_packaging import package_model
 from Capstone.configs.read_config import parse_config
 import argparse
 from pathlib import Path
@@ -19,5 +19,5 @@ if __name__ == "__main__":
     args = parse_args()
     cfg = parse_config(args.config_path)
 
-    model_path = Path(cfg.save_path) / 'ckp.pth'
-    package_model( cfg.mlflow_pyfunc_model_path, str(model_path), 'environment.yml')
+    model_path = Path(cfg.save_path) / "ckp.pth"
+    package_model(cfg.mlflow_pyfunc_model_path, str(model_path), "environment.yml")

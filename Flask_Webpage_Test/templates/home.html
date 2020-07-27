@@ -8,6 +8,13 @@
 <body>
 
 <h1>Welcome!</h1>
-<p1>Please upload patient images:</p1>
+<p1>Please upload patient images:</p1>  
+<br></br>
+
+<form method="POST" enctype="multipart/form-data" action="/uploadComplete">
+  <input type="file" name="file" multiple="">
+  <input type="submit" value="Submit Files">
+</form>
+
 </body>
 </html> 

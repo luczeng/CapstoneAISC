@@ -1,4 +1,5 @@
 from Capstone.configs.read_config import parse_config
+from Capstone.io.io import load_folder
 import argparse
 import pandas as pd
 import mlflow.pyfunc
@@ -14,7 +15,8 @@ def parse_args():
 
     return args
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     # Configs
     args = parse_args()
@@ -24,10 +26,9 @@ if __name__ == '__main__':
     loaded_model = mlflow.pyfunc.load_model(cfg.mlflow_pyfunc_model_path)
 
     # Load image
-    data = dataset = pydicom.dcmread(args.input_image)
-    img = data.pixel_array
+    imgs = load_folder(args.input_image)
 
     # Create panda dataframe
-    predictions = loaded_model.predict(pd.DataFrame(img))
+    predictions = loaded_model.predict(pd.DataFrame(imgs))
 
     print(type(predictions), predictions)
