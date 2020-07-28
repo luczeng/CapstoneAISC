@@ -50,7 +50,7 @@ def save_checkpoint(state, ckp_path):
     torch.save(state, ckp_path)
 
 
-def load_checkpoint(ckp_path, model, optimizer):
+def load_checkpoint(ckp_path, model, optimizer=None):
     """
         Updates the model and optimizers to the checkpoint's state
         :param ckp_path path to checkpoint (.pth file)
@@ -60,7 +60,9 @@ def load_checkpoint(ckp_path, model, optimizer):
     """
     checkpoint = torch.load(ckp_path)
     model.load_state_dict(checkpoint["state_dict"])
-    optimizer.load_state_dict(checkpoint["optimizer"])
+
+    if optimizer:
+        optimizer.load_state_dict(checkpoint["optimizer"])
 
     return checkpoint["epoch"]
 

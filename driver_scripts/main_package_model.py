@@ -20,4 +20,5 @@ if __name__ == "__main__":
     cfg = parse_config(args.config_path)
 
     model_path = Path(cfg.save_path) / "ckp.pth"
+    print(model_path)
     package_model(cfg.mlflow_pyfunc_model_path, str(model_path), "environment.yml")
