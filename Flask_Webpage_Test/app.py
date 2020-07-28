@@ -103,12 +103,11 @@ def predict():
         # Append predictions
         predictions.append(pred_arr[0].tolist())
 
-    # prediction = np.asarray(predictions)
-    print(predictions)
-
     # Return prediction as reponse
+    patients_list = [f'patient{idx}' for idx in range(len(predictions))]
+    probabilities = [predictions[idx][1] for idx in range(len(predictions))]
     updatedLog = pd.DataFrame(
-        {"Patient Image File": ["p1", "p2"], "Likelihood of Disease (%)": [predictions[0][1], predictions[1][1]]}
+        {"Patient Image File": patients_list, "Likelihood of Disease (%)": probabilities }
     )
     # html_file = pd.DataFrame(predictions).to_html()
     html_file = pd.DataFrame(updatedLog).to_html()
