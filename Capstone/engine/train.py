@@ -19,8 +19,8 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
 
     # Resume
     start = 0
-    if ckp_path.exists() and cfg.load_checkpoint:
-        start = load_checkpoint(ckp_path, net, optimizer)
+    # if ckp_path.exists() and cfg.load_checkpoint:
+        # start = load_checkpoint(ckp_path, net, optimizer)
 
     # Data
     dataset = DatasetRSNA(net_type, cfg.train_dataset_path, cfg.train_label_path)
@@ -68,7 +68,7 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
                     % (epoch, cfg.n_epoch, idx + 1, len(dataset) / cfg.mini_batch_size, accuracy)
                 )
 
-            if epoch % cfg.saving_epoch == cfg.saving_epoch - 1:
+            if idx % cfg.saving_epoch == cfg.saving_epoch - 1:
                 # Checkpoint, save checkpoint to disck
                 ckp = define_checkpoint(net, optimizer, epoch)
                 save_checkpoint(ckp, ckp_path)
