@@ -1,5 +1,5 @@
 from Capstone.utils.nn_utils import load_checkpoint, save_checkpoint, define_checkpoint
-from Capstone.data.datasets import DatasetRSNA
+from Capstone.data.datasets import DatasetRSNA_jpg
 from Capstone.utils.nn_utils import print_info
 from Capstone.utils.evaluation_utils import evaluate_model
 from torch.utils.data import DataLoader
@@ -23,7 +23,7 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
         # start = load_checkpoint(ckp_path, net, optimizer)
 
     # Data
-    dataset = DatasetRSNA(net_type, cfg.train_dataset_path, cfg.train_label_path)
+    dataset = DatasetRSNA_jpg(net_type, cfg.train_dataset_path, cfg.train_label_path)
     dataloader = DataLoader(dataset, batch_size=cfg.mini_batch_size, shuffle=True)
 
     # Training loop

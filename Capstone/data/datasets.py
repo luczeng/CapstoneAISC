@@ -2,6 +2,46 @@ from torch.utils.data import Dataset
 import pydicom
 import csv
 import torch
+import numpy as np
+from PIL import Image
+
+
+class DatasetRSNA_jpg(Dataset):
+    def __init__(self, net_type, image_folder_path, label_file_path):
+        """
+        """
+
+        with open(label_file_path, newline="") as f:
+            reader = csv.reader(f)
+            self.data = list(reader)
+
+        self.net_type = net_type
+        self.image_folder_path = image_folder_path
+        self.label_file_path = label_file_path
+
+    def __getitem__(self, idx):
+        """
+            Parses the DICOM file and return image and corresponding label
+
+            :param idx
+        """
+
+        img_info = self.data[idx]
+
+        img_path = self.image_folder_path + "/" + img_info[0] + ".jpg"
+        dataset = Image.open(img_path)
+        image = np.array(dataset)
+        image = torch.tensor(image[None, :, :]).type(self.net_type)
+
+        label = torch.tensor(int(img_info[5])).type(torch.cuda.LongTensor)
+
+        sample = {"image": image, "label": label}
+
+        return sample
+
+    def __len__(self):
+
+        return len(self.data) - 1
 
 
 class DatasetRSNA(Dataset):

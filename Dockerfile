@@ -1,4 +1,5 @@
-FROM ubuntu:18.04
+FROM nvidia/cuda:10.2-base
+CMD nvidia-smi
 
 # Set the working dir to root
 WORKDIR /root
@@ -23,6 +24,8 @@ ENV PATH /root/miniconda/bin:$PATH
 
 # Copy over model and api code into the image
 COPY ./api /root
+COPY ./flask_api /root
+COPY setup.py /root
 
 # Create a conda environment from the specified conda.yml
 RUN conda env create --file /root/conda.yaml
@@ -33,11 +36,9 @@ RUN echo "source activate capstone" >> .bashrc
 # Install packages and pip libraries into the conda environment
 RUN /bin/bash -c "source activate capstone" 
 RUN pip install --upgrade pip setuptools
+RUN pip install -e .
 
 RUN ["chmod","+x", "/root/start.sh"]
 
-RUN pwd
-RUN ls
-
 # Start the api
-ENTRYPOINT ["/root/start.sh"]
+#ENTRYPOINT ["/root/start.sh"]
