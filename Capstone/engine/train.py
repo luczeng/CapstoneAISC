@@ -32,6 +32,7 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
     epoch = 0
     for epoch in range(start, cfg.n_epoch):
         idx = 0
+        running_loss = 0.0
         for batch in dataloader:
 
             # GPU
@@ -68,7 +69,7 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
                     % (epoch, cfg.n_epoch, idx + 1, len(dataset) / cfg.mini_batch_size, accuracy)
                 )
 
-            if idx % cfg.saving_epoch == cfg.saving_epoch - 1:
+            if epoch % cfg.saving_epoch == cfg.saving_epoch - 1:
                 # Checkpoint, save checkpoint to disck
                 ckp = define_checkpoint(net, optimizer, epoch)
                 save_checkpoint(ckp, ckp_path)
