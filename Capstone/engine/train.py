@@ -1,5 +1,5 @@
 from Capstone.utils.nn_utils import load_checkpoint, save_checkpoint, define_checkpoint
-from Capstone.data.datasets import DatasetRSNA
+from Capstone.data.datasets import DatasetRSNA_jpg
 from Capstone.utils.nn_utils import print_info
 from Capstone.utils.evaluation_utils import evaluate_model
 from torch.utils.data import DataLoader
@@ -19,11 +19,11 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
 
     # Resume
     start = 0
-    if ckp_path.exists() and cfg.load_checkpoint:
-        start = load_checkpoint(ckp_path, net, optimizer)
+    # if ckp_path.exists() and cfg.load_checkpoint:
+        # start = load_checkpoint(ckp_path, net, optimizer)
 
     # Data
-    dataset = DatasetRSNA(net_type, cfg.train_dataset_path, cfg.train_label_path)
+    dataset = DatasetRSNA_jpg(net_type, cfg.train_dataset_path, cfg.train_label_path)
     dataloader = DataLoader(dataset, batch_size=cfg.mini_batch_size, shuffle=True)
 
     # Training loop
@@ -32,6 +32,7 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
     epoch = 0
     for epoch in range(start, cfg.n_epoch):
         idx = 0
+        running_loss = 0.0
         for batch in dataloader:
 
             # GPU
@@ -68,10 +69,10 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
                     % (epoch, cfg.n_epoch, idx + 1, len(dataset) / cfg.mini_batch_size, accuracy)
                 )
 
-            if epoch % cfg.saving_epoch == cfg.saving_epoch - 1:
-                # Checkpoint, save checkpoint to disck
-                ckp = define_checkpoint(net, optimizer, epoch)
-                save_checkpoint(ckp, ckp_path)
+        if epoch % cfg.saving_epoch == cfg.saving_epoch - 1:
+            # Checkpoint, save checkpoint to disck
+            ckp = define_checkpoint(net, optimizer, epoch)
+            save_checkpoint(ckp, ckp_path)
 
         epoch += 1
 

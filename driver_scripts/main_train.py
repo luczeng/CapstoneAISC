@@ -48,7 +48,7 @@ def run_train(args):
     criterion = CrossEntropyLoss()
 
     # Print net info and log parameters
-    rsna_size = [1024, 1024]  # TODO: make this agnostic of dataset
+    rsna_size = [512, 512]  # TODO: make this agnostic of dataset
     print_training_info(net, rsna_size)
     log_mlflow_param(cfg)
 

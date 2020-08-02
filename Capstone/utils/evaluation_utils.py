@@ -1,6 +1,6 @@
 import torch
 from pathlib import Path
-from Capstone.data.datasets import DatasetRSNA
+from Capstone.data.datasets import DatasetRSNA_jpg
 from torch.utils.data import DataLoader
 
 
@@ -17,13 +17,13 @@ def evaluate_model(model, image_folder_path, label_file_path, cfg, net_type):
     if Path(label_file_path).suffix != ".csv":
         raise ValueError("Label file should be of csv format")
 
-    dataset = DatasetRSNA(net_type, image_folder_path, label_file_path)
+    dataset = DatasetRSNA_jpg(net_type, image_folder_path, label_file_path)
     dataloader = DataLoader(dataset, batch_size=cfg.mini_batch_size, shuffle=False)
 
-    accuracy = 0
+    error = 0
     for batch in dataloader:
 
         inferences = torch.argmax(model(batch["image"]), axis=1)
-        accuracy += torch.sum(batch["label"] - inferences)
+        error += torch.sum(torch.abs(batch["label"] - inferences))
 
-    return accuracy
+    return error
