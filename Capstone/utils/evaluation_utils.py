@@ -4,7 +4,7 @@ from Capstone.data.datasets import DatasetRSNA_jpg
 from torch.utils.data import DataLoader
 
 
-def evaluate_model(model, image_folder_path, label_file_path, cfg, net_type):
+def evaluate_model(model, image_folder_path, label_file_path, mini_batch_size, net_type):
     """
         Evaluates the model on the given dataset
 
@@ -18,7 +18,7 @@ def evaluate_model(model, image_folder_path, label_file_path, cfg, net_type):
         raise ValueError("Label file should be of csv format")
 
     dataset = DatasetRSNA_jpg(net_type, image_folder_path, label_file_path)
-    dataloader = DataLoader(dataset, batch_size=cfg.mini_batch_size, shuffle=False)
+    dataloader = DataLoader(dataset, batch_size=mini_batch_size, shuffle=False)
 
     error = 0
     for batch in dataloader:

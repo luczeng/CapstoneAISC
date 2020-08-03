@@ -1,8 +1,14 @@
+# Packaging result
+api
+
 # Dataset
 dataset
 
 # Mlflow stuff
 mlruns
+
+# Training folder
+training_results
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

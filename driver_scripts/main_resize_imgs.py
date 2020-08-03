@@ -18,14 +18,13 @@ def resize_and_save(inpath, outpath):
         dataset = pydicom.dcmread(img_path)
         image = dataset.pixel_array
 
-        new_img_path = Path(outpath) / (img_path.stem + '.jpg')
+        new_img_path = Path(outpath) / (img_path.stem + ".jpg")
 
         pil_img = Image.fromarray(image)
         pil_img.save(new_img_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     resize_and_save(train_img_folder, train_resized_folder)
     resize_and_save(test_img_folder, test_img_resized_folder)
-

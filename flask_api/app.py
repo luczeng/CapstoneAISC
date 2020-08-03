@@ -11,6 +11,7 @@ import os
 import argparse
 import mlflow.pyfunc
 from pathlib import Path
+
 # from Capstone.io.io import load_dicom
 
 
@@ -46,6 +47,7 @@ def uploadComplete():
 
     return render_template("image.html", images=images)
 
+
 @app.route("/about")
 def about():
 
@@ -77,18 +79,17 @@ def predict():
         predictions.append(pred_arr[0].tolist())
 
     # Return prediction as reponse
-    patients_list = [f'patient{idx}' for idx in range(len(predictions))]
+    patients_list = [f"patient{idx}" for idx in range(len(predictions))]
     probabilities = [predictions[idx][1] for idx in range(len(predictions))]
-    updatedLog = pd.DataFrame(
-        {"Patient Image File": patients_list, "Likelihood of Disease (%)": probabilities }
-    )
+    updatedLog = pd.DataFrame({"Patient Image File": patients_list, "Likelihood of Disease (%)": probabilities})
     # html_file = pd.DataFrame(predictions).to_html()
     html_file = pd.DataFrame(updatedLog).to_html()
 
-    with open('Flask_Webpage_Test/templates/predict.html','w') as f:
+    with open("Flask_Webpage_Test/templates/predict.html", "w") as f:
         f.write(html_file)
 
-    return render_template('predict.html')
+    return render_template("predict.html")
+
 
 # Prediction endpoint
 @app.route("/predict", methods=["POST"])
@@ -115,7 +116,6 @@ def predict_api():
         # Append predictions
         predictions.append(pred_arr[0].tolist())
 
-
     # Return prediction as reponse
     return jsonify(predictions)
 
@@ -129,4 +129,3 @@ if __name__ == "__main__":
     model = mlflow.pyfunc.load_model(args.mlflow_pyfunc_model_path)
 
     app.run(host="0.0.0.0", port=5000, debug=True)
-
