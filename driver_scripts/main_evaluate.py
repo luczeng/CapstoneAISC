@@ -35,13 +35,8 @@ if __name__ == "__main__":
         net_type = torch.FloatTensor
     net = net.type(net_type)  # todo: find another way
 
+    load_checkpoint(args.ckp_path, net)
+    net.eval()
+
     error = evaluate_model(net, args.image_folder, args.label_file_path, 1, net_type)
-    print(error)
-    # dataset = Image.open(args.input_image)
-    # image = np.array(dataset)
-    # image = torch.tensor(image[None, None, :, :]).type(net_type)
-
-    # load_checkpoint(args.ckp_path, net)
-    # net.eval()
-
-    # prediction = net(image)
+    print('The error is: ', error)
