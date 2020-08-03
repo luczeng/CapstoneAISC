@@ -35,7 +35,6 @@ if __name__ == "__main__":
         net_type = torch.FloatTensor
     net = net.type(net_type)  # todo: find another way
 
-
     error = evaluate_model(net, args.image_folder, args.label_file_path, 1, net_type)
     print(error)
     # dataset = Image.open(args.input_image)
@@ -46,4 +45,3 @@ if __name__ == "__main__":
     # net.eval()
 
     # prediction = net(image)
-

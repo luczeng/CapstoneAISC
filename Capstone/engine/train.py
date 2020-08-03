@@ -20,7 +20,7 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
     # Resume
     start = 0
     # if ckp_path.exists() and cfg.load_checkpoint:
-        # start = load_checkpoint(ckp_path, net, optimizer)
+    # start = load_checkpoint(ckp_path, net, optimizer)
 
     # Data
     dataset = DatasetRSNA_jpg(net_type, cfg.train_dataset_path, cfg.train_label_path)
@@ -64,7 +64,9 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
             # Run evaluation
             if (idx % cfg.validation_period == (cfg.validation_period - 1)) & idx != 0:
                 net.eval()
-                accuracy = evaluate_model(net, cfg.test_dataset_path, cfg.test_label_path, cfg.mini_batch_size, net_type)
+                accuracy = evaluate_model(
+                    net, cfg.test_dataset_path, cfg.test_label_path, cfg.mini_batch_size, net_type
+                )
                 mlflow.log_metric("accuracy", accuracy.item(), step=epoch + idx)
                 print(
                     "Epoch : %d/%d, iteration: %d/%5d || Accuracy: %.3f"
