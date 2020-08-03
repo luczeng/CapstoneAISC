@@ -11,8 +11,7 @@ import os
 import argparse
 import mlflow.pyfunc
 from pathlib import Path
-
-# from Capstone.io.io import load_dicom
+from PIL import Image
 
 
 def parse_args():
@@ -39,56 +38,53 @@ def home():
 @app.route("/uploadComplete", methods=["GET", "POST"])
 def uploadComplete():
 
+    # Empty List to store user uploaded Patient Image Filenames
+    images = []
     for f in request.files.getlist("file"):
         filename = secure_filename(f.filename)
         f.save(os.path.join(uploads_dir, secure_filename(f.filename)))
         images.append(filename)
-    print(images)
 
     return render_template("image.html", images=images)
 
 
-@app.route("/about")
-def about():
-
-    # TO BE COMPLETED
-    # Update Log DataFrame with Uploaded Image Filenames & Model Preductions
-    print(df)
-
-    return render_template("about.html")
-
-
-@app.route("/predict")
-def predict():
+@app.route('/log')
+def log():
     """
         Loads request from disk and then launch prediction
     """
+
 
     # Create panda dataframe
     predictions = []
     for fp in Path(uploads_dir).iterdir():
 
         # Load image
-        img = load_dicom(fp)
+        dataset = Image.open(fp)
+        image = np.array(dataset)
+        image = image[:, :]
 
         # Format the request to a dataframe
-        img_pf = pd.DataFrame(img)
+        img_pf = pd.DataFrame(image)
         pred_arr = model.predict(img_pf)
 
         # Append predictions
         predictions.append(pred_arr[0].tolist())
 
-    # Return prediction as reponse
+    # Get probabilities
     patients_list = [f"patient{idx}" for idx in range(len(predictions))]
-    probabilities = [predictions[idx][1] for idx in range(len(predictions))]
+    probabilities = [predictions[idx][1]*100 for idx in range(len(predictions))]
+
+    # Write logs
+    originalLog = pd.DataFrame({"Patient Image File": patients_list, "Likelihood of Disease (%)": 50})
     updatedLog = pd.DataFrame({"Patient Image File": patients_list, "Likelihood of Disease (%)": probabilities})
-    # html_file = pd.DataFrame(predictions).to_html()
-    html_file = pd.DataFrame(updatedLog).to_html()
+    updatedLog = updatedLog.sort_values(by="Likelihood of Disease (%)", ascending =False)
 
-    with open("Flask_Webpage_Test/templates/predict.html", "w") as f:
-        f.write(html_file)
+    tables = {"Original Patient Log": originalLog.to_html(classes='data', header="true"),
+           "Ai-radio-assistant patient Log": updatedLog.to_html(classes='data', header="true")
+            }
 
-    return render_template("predict.html")
+    return render_template('log.html',  tables=tables)
 
 
 # Prediction endpoint
@@ -107,10 +103,12 @@ def predict_api():
     for fp in Path(folder_path).iterdir():
 
         # Load image
-        img = load_dicom(fp)
+        dataset = Image.open(fp)
+        image = np.array(dataset)
+        image = image[None, :, :]
 
         # Format the request to a dataframe
-        img_pf = pd.DataFrame(img)
+        img_pf = pd.DataFrame(image)
         pred_arr = model.predict(img_pf)
 
         # Append predictions

@@ -10,6 +10,9 @@ mlruns
 # Training folder
 training_results
 
+# Flask api
+flask_api/*.jpg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

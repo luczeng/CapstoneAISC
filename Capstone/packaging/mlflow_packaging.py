@@ -19,9 +19,9 @@ class resnet_wrapper(mlflow.pyfunc.PythonModel):
         self.net.type(torch.cuda.FloatTensor)
 
         # Load weights
-        # print(context.artifacts["state_dict"])
+        print()
         # print("wut wut")
-        # load_checkpoint('training_results/test_run2/ckp.pth', self.net)
+        load_checkpoint(context.artifacts["state_dict"], self.net)
 
         self.softmax = nn.Softmax(dim=1)
 

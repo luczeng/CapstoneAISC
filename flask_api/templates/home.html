@@ -7,13 +7,19 @@
 
 <body>
 
-<h1>Welcome!</h1>
+<h1>Welcome to the ai-radio-assistant!</h1>
 <p1>Please upload patient images:</p1>  
 <br></br>
 
 <form method="POST" enctype="multipart/form-data" action="/uploadComplete">
   <input type="file" name="file" multiple="">
   <input type="submit" value="Submit Files">
+</form>
+
+<br></br>
+
+<form action="/log">
+  <input type="submit" value="Predict Log">
 </form>
 
 </body>
