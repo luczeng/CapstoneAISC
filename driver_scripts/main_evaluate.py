@@ -39,4 +39,4 @@ if __name__ == "__main__":
     net.eval()
 
     error = evaluate_model(net, args.image_folder, args.label_file_path, 1, net_type)
-    print('The error is: ', error)
+    print("The error is: ", error)

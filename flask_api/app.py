@@ -48,12 +48,11 @@ def uploadComplete():
     return render_template("image.html", images=images)
 
 
-@app.route('/log')
+@app.route("/log")
 def log():
     """
         Loads request from disk and then launch prediction
     """
-
 
     # Create panda dataframe
     predictions = []
@@ -73,18 +72,19 @@ def log():
 
     # Get probabilities
     patients_list = [f"patient{idx}" for idx in range(len(predictions))]
-    probabilities = [predictions[idx][1]*100 for idx in range(len(predictions))]
+    probabilities = [predictions[idx][1] * 100 for idx in range(len(predictions))]
 
     # Write logs
     originalLog = pd.DataFrame({"Patient Image File": patients_list, "Likelihood of Disease (%)": 50})
     updatedLog = pd.DataFrame({"Patient Image File": patients_list, "Likelihood of Disease (%)": probabilities})
-    updatedLog = updatedLog.sort_values(by="Likelihood of Disease (%)", ascending =False)
+    updatedLog = updatedLog.sort_values(by="Likelihood of Disease (%)", ascending=False)
 
-    tables = {"Original Patient Log": originalLog.to_html(classes='data', header="true"),
-           "Ai-radio-assistant patient Log": updatedLog.to_html(classes='data', header="true")
-            }
+    tables = {
+        "Original Patient Log": originalLog.to_html(classes="data", header="true"),
+        "Ai-radio-assistant patient Log": updatedLog.to_html(classes="data", header="true"),
+    }
 
-    return render_template('log.html',  tables=tables)
+    return render_template("log.html", tables=tables)
 
 
 # Prediction endpoint
