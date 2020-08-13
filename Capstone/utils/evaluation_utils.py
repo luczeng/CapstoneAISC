@@ -33,8 +33,10 @@ def evaluate_model(model, image_folder_path, label_file_path, mini_batch_size, n
     pr, rc, f_score, support = precision_recall_fscore_support(y_true, y_pred)
     pr_micro, rc_micro, f_score_micro, support = precision_recall_fscore_support(y_true, y_pred, average="micro")
     pr_macro, rc_macro, f_score_macro, support = precision_recall_fscore_support(y_true, y_pred, average="macro")
-    print(pr, rc, f_score)
-    print(pr_micro, rc_micro, f_score_micro)
-    print(pr_macro, rc_macro, f_score_macro)
+
+    print('\nPrecision, recall and fscore:')
+    print(f'Per cat: [{pr[0]:.2f} {pr[1]:.2f}], [{rc[0]:.2f} {rc[1]:.2f}], [{f_score[0]:.2f} {f_score[1]:.2f}]')
+    print(f'Micro  : {pr_micro:.2f}, {rc_micro:.2f}, {f_score_micro:.2f}')
+    print(f'macro  : {pr_macro:.2f}, {rc_macro:.2f}, {f_score_macro:.2f}')
 
     return error
