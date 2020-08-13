@@ -31,8 +31,10 @@ def evaluate_model(model, image_folder_path, label_file_path, mini_batch_size, n
         y_true.append(batch["label"].item())
 
     pr, rc, f_score, support = precision_recall_fscore_support(y_true, y_pred)
-    print(pr,rc, f_score)
+    pr_micro, rc_micro, f_score_micro, support = precision_recall_fscore_support(y_true, y_pred, average="micro")
+    pr_macro, rc_macro, f_score_macro, support = precision_recall_fscore_support(y_true, y_pred, average="macro")
+    print(pr, rc, f_score)
+    print(pr_micro, rc_micro, f_score_micro)
+    print(pr_macro, rc_macro, f_score_macro)
 
     return error
-
-
