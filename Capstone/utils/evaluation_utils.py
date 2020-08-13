@@ -2,7 +2,7 @@ import torch
 from pathlib import Path
 from Capstone.data.datasets import DatasetRSNA_jpg
 from torch.utils.data import DataLoader
-import torch.nn as nn
+from sklearn.metrics import precision_recall_fscore_support
 
 
 def evaluate_model(model, image_folder_path, label_file_path, mini_batch_size, net_type):
@@ -22,13 +22,21 @@ def evaluate_model(model, image_folder_path, label_file_path, mini_batch_size, n
     dataloader = DataLoader(dataset, batch_size=mini_batch_size, shuffle=False)
 
     error = 0
-    softmax = nn.Softmax(dim=1)
+    y_pred = []
+    y_true = []
     for batch in dataloader:
 
-        inferences = model(batch["image"])
-        prob = softmax(inferences).detach().cpu().numpy()[0]
-        print("{:.2f} {:2f}".format(prob[0], prob[1]))
-        inferences = torch.argmax(inferences, axis=1)
-        error += torch.sum(torch.abs(batch["label"] - inferences))
+        inferences = torch.argmax(model(batch["image"]), axis=1)
+        y_pred.append(inferences.item())
+        y_true.append(batch["label"].item())
+
+    pr, rc, f_score, support = precision_recall_fscore_support(y_true, y_pred)
+    pr_micro, rc_micro, f_score_micro, support = precision_recall_fscore_support(y_true, y_pred, average="micro")
+    pr_macro, rc_macro, f_score_macro, support = precision_recall_fscore_support(y_true, y_pred, average="macro")
+
+    print('\nPrecision, recall and fscore:')
+    print(f'Per cat: [{pr[0]:.2f} {pr[1]:.2f}], [{rc[0]:.2f} {rc[1]:.2f}], [{f_score[0]:.2f} {f_score[1]:.2f}]')
+    print(f'Micro  : {pr_micro:.2f}, {rc_micro:.2f}, {f_score_micro:.2f}')
+    print(f'macro  : {pr_macro:.2f}, {rc_macro:.2f}, {f_score_macro:.2f}')
 
     return error

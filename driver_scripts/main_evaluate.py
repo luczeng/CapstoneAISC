@@ -27,6 +27,8 @@ if __name__ == "__main__":
     # Net
     net = initalize_resnet(2, False, True)
 
+    load_checkpoint(args.ckp_path, net)
+
     # Determine type(GPU or not)
     if torch.cuda.is_available():
         net.to(device=torch.device("cuda"))
@@ -34,6 +36,7 @@ if __name__ == "__main__":
     else:
         net_type = torch.FloatTensor
     net = net.type(net_type)  # todo: find another way
+    net.eval()
 
     load_checkpoint(args.ckp_path, net)
     net.eval()
