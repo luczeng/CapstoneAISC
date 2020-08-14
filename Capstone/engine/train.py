@@ -65,7 +65,7 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
             if (idx % cfg.validation_period == (cfg.validation_period - 1)) & idx != 0:
                 net.eval()
                 pr, rc, fscore = evaluate_model(
-                    net, cfg.test_dataset_path, cfg.test_label_path, cfg.mini_batch_size, net_type
+                    net, cfg.test_dataset_path, cfg.test_label_path, 1, net_type
                 )
                 mlflow.log_metric("precision", pr[0], step=epoch + idx)
                 mlflow.log_metric("precision", pr[1], step=epoch + idx)
