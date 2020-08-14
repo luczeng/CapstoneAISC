@@ -12,7 +12,7 @@ def evaluate_model(model, image_folder_path, label_file_path, mini_batch_size, n
         :param model model to evaluate
         :param image_folder_path path to folder containing dicom images
         :param label_file_path path to .csv file that should contain labels
-        :return accuracy
+        :return precision, recall, fscore
     """
 
     if Path(label_file_path).suffix != ".csv":
@@ -39,4 +39,4 @@ def evaluate_model(model, image_folder_path, label_file_path, mini_batch_size, n
     print(f'Micro  : {pr_micro:.2f}, {rc_micro:.2f}, {f_score_micro:.2f}')
     print(f'macro  : {pr_macro:.2f}, {rc_macro:.2f}, {f_score_macro:.2f}')
 
-    return error
+    return pr, rc, f_score

@@ -64,14 +64,19 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
             # Run evaluation
             if (idx % cfg.validation_period == (cfg.validation_period - 1)) & idx != 0:
                 net.eval()
-                accuracy = evaluate_model(
+                pr, rc, fscore = evaluate_model(
                     net, cfg.test_dataset_path, cfg.test_label_path, cfg.mini_batch_size, net_type
                 )
-                mlflow.log_metric("accuracy", accuracy.item(), step=epoch + idx)
-                print(
-                    "Epoch : %d/%d, iteration: %d/%5d || Accuracy: %.3f"
-                    % (epoch, cfg.n_epoch, idx + 1, len(dataset) / cfg.mini_batch_size, accuracy)
-                )
+                mlflow.log_metric("precision", pr[0], step=epoch + idx)
+                mlflow.log_metric("precision", pr[1], step=epoch + idx)
+                mlflow.log_metric("recall", rc[0], step=epoch + idx)
+                mlflow.log_metric("recall", rc[1], step=epoch + idx)
+                mlflow.log_metric("fscore", fscore[0], step=epoch + idx)
+                mlflow.log_metric("fscore", fscore[1], step=epoch + idx)
+                # print(
+                    # "Epoch : %d/%d, iteration: %d/%5d || Accuracy: %.3f"
+                    # % (epoch, cfg.n_epoch, idx + 1, len(dataset) / cfg.mini_batch_size, accuracy)
+                # )
 
         if epoch % cfg.saving_epoch == cfg.saving_epoch - 1:
             # Checkpoint, save checkpoint to disck
