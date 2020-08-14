@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<style>
+div.gallery {
+  border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+</style>
+
+<body>
+
+<h1>Patient Files</h1>
+
+<div class="gallery">
+{% for name in images %}
+<figure>
+ <a target="_blank" href="{{ url_for('static', filename='' + name) }}">
+ <img src="{{ url_for('static', filename='' + name) }}" align="middle"  style="width:20%">
+ </a>
+ <div class="desc">{{ 'Patient: ' + name }}</div>
+</figure>
+{% endfor %}
+</div>
+
+</body>
+</html> 
