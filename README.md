@@ -1,6 +1,7 @@
 # CapstoneAISC
  This project allows to train, package and deploy a model for pneumonia classification. The models are trained on the
  RSNA dataset.  
+
  Note: this project was not unit tested. Even if it was shown to work, we do not guarantee its usage.
 
 # Installation

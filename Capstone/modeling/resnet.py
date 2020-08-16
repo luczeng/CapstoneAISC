@@ -23,7 +23,7 @@ def initalize_resnet(num_classes: int, feature_extracting: bool = False, use_pre
         :param model
     """
 
-    model_ft = models.resnet34(pretrained=use_pretrained)
+    model_ft = models.resnet50(pretrained=use_pretrained)
     set_parameter_requires_grad(model_ft, feature_extracting)
     model_ft.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
     num_features = model_ft.fc.in_features

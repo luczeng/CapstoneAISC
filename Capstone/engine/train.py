@@ -67,12 +67,12 @@ def train_loop(cfg, ckp_path, save_path, net, net_type, optimizer, criterion):
                 pr, rc, fscore = evaluate_model(
                     net, cfg.test_dataset_path, cfg.test_label_path, 1, net_type
                 )
-                mlflow.log_metric("precision", pr[0], step=epoch + idx)
-                mlflow.log_metric("precision", pr[1], step=epoch + idx)
-                mlflow.log_metric("recall", rc[0], step=epoch + idx)
-                mlflow.log_metric("recall", rc[1], step=epoch + idx)
-                mlflow.log_metric("fscore", fscore[0], step=epoch + idx)
-                mlflow.log_metric("fscore", fscore[1], step=epoch + idx)
+                mlflow.log_metric("precision_neg", pr[0], step=epoch + idx)
+                mlflow.log_metric("precision_pos", pr[1], step=epoch + idx)
+                mlflow.log_metric("recall_neg", rc[0], step=epoch + idx)
+                mlflow.log_metric("recall_pos", rc[1], step=epoch + idx)
+                mlflow.log_metric("fscore_neg", fscore[0], step=epoch + idx)
+                mlflow.log_metric("fscore_pos", fscore[1], step=epoch + idx)
                 # print(
                     # "Epoch : %d/%d, iteration: %d/%5d || Accuracy: %.3f"
                     # % (epoch, cfg.n_epoch, idx + 1, len(dataset) / cfg.mini_batch_size, accuracy)
