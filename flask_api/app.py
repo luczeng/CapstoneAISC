@@ -23,6 +23,14 @@ def parse_args():
     return args
 
 
+# Put here the model metrics
+modelMetrics = pd.DataFrame({
+     'Accuracy': [1],
+     'Precision': [2],
+     'Recall': [3],
+     'F1 Score': [4]
+     })
+
 # Instantiate Flask
 app = Flask(__name__)
 
@@ -34,19 +42,22 @@ uploads_dir = os.path.join(app.root_path, "static")
 def home():
     return render_template("home.html")
 
+@app.route('/upload')
+def upload():
+  return render_template('upload.html')
 
-@app.route("/uploadComplete", methods=["GET", "POST"])
-def uploadComplete():
 
-    # Empty List to store user uploaded Patient Image Filenames
-    images = []
+images = []
+@app.route("/patientFiles", methods=['GET', 'POST'])
+def patientFiles():
+
     for f in request.files.getlist("file"):
         filename = secure_filename(f.filename)
         f.save(os.path.join(uploads_dir, secure_filename(f.filename)))
         images.append(filename)
+    print(images)
 
-    return render_template("image.html", images=images)
-
+    return render_template('image.html',images=images)
 
 @app.route("/log")
 def log():
@@ -81,7 +92,7 @@ def log():
 
     tables = {
         "Original Patient Log": originalLog.to_html(classes="data", header="true"),
-        "Ai-radio-assistant patient Log": updatedLog.to_html(classes="data", header="true"),
+        "Updated Patient Log": updatedLog.to_html(classes="data", header="true"),
     }
 
     return render_template("log.html", tables=tables)

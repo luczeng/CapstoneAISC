@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 import os
 
-# Instantiate Flask 
+# Instantiate Flask
 app = Flask(__name__)
 
 # Directory Folder to save user uploaded Patient Image Files
@@ -16,7 +16,7 @@ df = pd.DataFrame(columns=['Patient Image File','Likelihood of Disease'])
 # Empty List to store user uploaded Patient Image Filenames
 images = []
 
-# Dummy Array: Test Model and Store Predictions 
+# Dummy Array: Test Model and Store Predictions
 predictArray = np.array([[0.2, 0.8], [0.4, 0.6], [0.3, 0.7]])
 
 # Dummy Patient Test Logs
@@ -44,32 +44,32 @@ def home():
 
 @app.route('/upload')
 def upload():
-  return render_template('upload.html') 
+  return render_template('upload.html')
 
-   
+
 @app.route("/patientFiles", methods=['GET', 'POST'])
 def patientFiles():
 
     for f in request.files.getlist("file"):
         filename = secure_filename(f.filename)
         f.save(os.path.join(uploads_dir, secure_filename(f.filename)))
-        images.append(filename) 
+        images.append(filename)
     print(images)
-        
+
     return render_template('image.html',images=images)
 
-    
+
 @app.route('/log')
 def log():
-    
+
     tables = {"Original Patient Log": originalLog.to_html(classes='data', header="true"),
            "Updated Patient Log": updatedLog.to_html(classes='data', header="true"),
            "Model Metrics": modelMetrics.to_html(classes='data', header="true", index=False)
             }
-    
+
     return render_template('log.html',  tables=tables)
 
 
-#Run Flask env 
+#Run Flask env
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,12 +1,82 @@
 <!DOCTYPE html>
 <html>
+<style>
+table, td, th {  
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 10px;
+
+}
+
+tr:hover {background-color: #f5f5f5;} 
+     
+th {
+  background-color: #4682B4;
+  color: white;
+}
+
+.row {
+  display: flex;
+}
+
+/* Create two equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 10px;
+}
+
+#metrics{
+  display: none;
+}
+</style>
+
 <body>
 
+<div class="row">
 {% for key, value in tables.items() %}  
+
+  {% if key == "Original Patient Log" %}  
+  <div class="column">
         <h1> {{ key }} </h1>
-        {{ value|safe }}
+        <p1> Patients sorted without prioritization </p1>
         <br></br>
+        {{ value|safe }}
+  </div>
+  
+  {% elif key == "Updated Patient Log" %}
+  <div class="column">
+        <h1> {{ key }} </h1>
+        <p1> Patients sorted with prioritization </p1>
+        <br></br>
+        {{ value|safe }}
+  </div>
+  
+  <button onclick="displayMetrics()">View Model Metrics</button>
+  <div id="metrics">  
+      {% elif key == "Model Metrics" %}
+      <div class="column">
+        <h1> {{ key }} </h1>
+        <p1> Classifier Metrics </p1>
+        <br></br>
+        {{ value|safe }}
+      </div>
+  </div>
+
+  {% endif %} 
+  
 {% endfor %}
+</div>
+
+<script>
+function displayMetrics() {
+  var x = document.getElementById("metrics");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
 
 </body>
 </html>
