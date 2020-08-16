@@ -1,13 +1,21 @@
 # CapstoneAISC
  This project allows to train, package and deploy a model for pneumonia classification. The models are trained on the
  RSNA dataset.  
+
  Note: this project was not unit tested. Even if it was shown to work, we do not guarantee its usage.
 
 # Installation
 Create a conda environment and type `pip install -e .`
 
+# Data preparation
+We offer some helper script to prepare the dataset:
+- [Train-test split](driver_scripts/main_split_train_test.py)
+- [Resize images](driver_scripts/main_resize_imgs.py)
+- [Downsample the negatives](driver_scripts/main_create_balanced_dataset.py)
+- [Count the number of positives and negatives](driver_scripts/main_analyse_dataset.py)
+
 # Training
-TBD
+The entry point to the training script is [here](driver_scripts/main_train.py). You can specify the parameters in your own config file. We provide an example [here](Capstone/configs/config_RSNA.yml).
 
 # Packaging, containerizing and deploy
 From your conda environment, follow the following steps.  
